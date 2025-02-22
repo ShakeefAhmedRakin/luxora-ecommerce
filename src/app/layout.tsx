@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import { Merriweather_Sans, Work_Sans } from "next/font/google";
+const workSans = Work_Sans({
+  weight: ["100", "200", "300", "400", "500", "800", "700", "800", "900"],
   subsets: ["latin"],
+  variable: "--font-heading",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const merriweather = Merriweather_Sans({
+  weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
+  variable: "--font-body",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${workSans.variable} ${merriweather.variable} antialiased`}
       >
         {children}
         <Toaster richColors />
