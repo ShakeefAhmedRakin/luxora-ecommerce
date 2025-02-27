@@ -3,30 +3,58 @@ import { useActionState } from "react";
 import { useEffect } from "react";
 import { registerUser } from "../actions";
 import { toast } from "sonner";
+import { AuthResponseType } from "@/types/auth";
+
+const initialAuthResponse: AuthResponseType = { success: null, message: "" };
 
 export default function RegisterPage() {
-  const [state, action, pending] = useActionState(registerUser, {
-    success: null,
-    message: "",
-  });
+  const [responseState, action, pending] = useActionState(
+    registerUser,
+    initialAuthResponse
+  );
 
   useEffect(() => {
-    if (state.message) {
-      if (state.success) {
-        toast.success(state.message);
+    if (responseState.message) {
+      if (responseState.success) {
+        toast.success(responseState.message);
       } else {
-        toast.error(state.message);
+        toast.error(responseState.message);
       }
     }
-  }, [state]);
+  }, [responseState]);
 
   return (
     <form action={action} className="flex flex-col gap-3">
+      <label htmlFor="displayName">Display Name:</label>
+      <input
+        id="displayName"
+        name="displayName"
+        type="text"
+        required
+        autoComplete="username"
+      />
+
       <label htmlFor="email">Email:</label>
-      <input id="email" name="email" type="email" />
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        autoComplete="email"
+      />
+
       <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" />
-      <button type="submit">{pending ? "XXX" : "Sign up"}</button>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        required
+        autoComplete="current-password"
+      />
+
+      <button type="submit" disabled={pending}>
+        {pending ? "Logging in..." : "Login"}
+      </button>
     </form>
   );
 }
