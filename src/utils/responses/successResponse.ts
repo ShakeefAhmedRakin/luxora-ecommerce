@@ -1,12 +1,12 @@
 import { ServerResponseType } from "@/types/responses";
 
-export function successResponse(
+export function successResponse<T>(
   message: string,
-  data: unknown = null
-): ServerResponseType {
+  data: T = null as T
+): ServerResponseType<T> {
   return {
     success: true,
-    message: message,
-    data: data,
+    message,
+    data,
   };
 }

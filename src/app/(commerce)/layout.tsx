@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./_components/navbar";
+import Navbar from "./_components/navbar/navbar";
 
 export default function HomeLayout(props: React.PropsWithChildren) {
   return (

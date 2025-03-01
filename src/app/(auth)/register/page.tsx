@@ -5,8 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import RegisterForm from "./_components/register-form";
+import RegisterForm from "../_components/register-form";
 import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import LoginGoogleButton from "../_components/login-google-button";
 
 export default function RegisterPage() {
   return (
@@ -21,6 +23,8 @@ export default function RegisterPage() {
           </CardHeader>
           <CardContent>
             <RegisterForm />
+            <Separator className="my-2" />
+            <LoginGoogleButton />
           </CardContent>
           <CardFooter className="flex justify-center">
             <p className="text-sm text-muted-foreground">

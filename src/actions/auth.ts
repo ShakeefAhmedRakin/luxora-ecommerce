@@ -59,6 +59,20 @@ export async function loginUser(
   }
 }
 
+export async function loginUserWithGoogle(): Promise<
+  ServerResponseType<{ callbackUrl: string }>
+> {
+  try {
+    const userService = await getUserService();
+
+    const callbackUrl = await userService.loginUserWithGoogle();
+
+    return successResponse("Login successful!", { callbackUrl });
+  } catch (error: unknown) {
+    return errorResponse(error);
+  }
+}
+
 export async function getUser(): Promise<User | null> {
   const userService = await getUserService();
 

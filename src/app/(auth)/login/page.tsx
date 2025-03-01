@@ -6,7 +6,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import LoginForm from "./_components/login-form";
+import LoginForm from "../_components/login-form";
+import { Separator } from "@/components/ui/separator";
+import LoginGoogleButton from "../_components/login-google-button";
 
 export default function LoginPage() {
   return (
@@ -20,6 +22,8 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <LoginForm />
+          <Separator className="my-2" />
+          <LoginGoogleButton />
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">

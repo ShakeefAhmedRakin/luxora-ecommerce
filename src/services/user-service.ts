@@ -1,5 +1,4 @@
 import { LoginCredentialsType, RegisterCredentialsType } from "@/types/auth";
-import { supabaseClient } from "@/utils/supabase/client";
 import { SupabaseClient, User } from "@supabase/supabase-js";
 
 class UserService {
@@ -50,6 +49,21 @@ class UserService {
     }
   }
 
+  async loginUserWithGoogle() {
+    const { data, error } = await this.supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`,
+      },
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data?.url;
+  }
+
   async getUser(): Promise<User | null> {
     const { data } = await this.supabase.auth.getUser();
 
@@ -57,13 +71,10 @@ class UserService {
   }
 
   async logOutUser() {
-    const supabaseBrowser = supabaseClient();
-
-    // log out from browser session
-    await supabaseBrowser.auth.signOut();
-
-    // log out from server session
-    await this.supabase.auth.signOut();
+    const { error } = await this.supabase.auth.signOut();
+    if (error) {
+      throw new Error(error.message);
+    }
   }
 }
 

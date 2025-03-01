@@ -1,7 +1,7 @@
-export type ServerResponseType = {
+export type ServerResponseType<T = unknown> = {
   success: boolean | null;
   message: string;
-  data?: unknown;
+  data?: T;
 };
 
 export const defaultServerResponse: ServerResponseType = {
