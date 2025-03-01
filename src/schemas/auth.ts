@@ -21,4 +21,16 @@ export const RegisterCredentialsSchema = LoginCredentialsSchema.extend({
     .string()
     .trim()
     .min(3, { message: "Full name must be at least 3 characters long" }),
-}).strict();
+  confirmPassword: z
+    .string()
+    .trim()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .regex(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$/, {
+      message: "Password must contain at least one letter and one number",
+    }),
+})
+  .strict()
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });

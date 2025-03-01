@@ -1,54 +1,35 @@
-"use client";
-import { useActionState } from "react";
-import { useEffect } from "react";
-import { loginUser } from "@/actions/auth";
-import { toast } from "sonner";
-import { ServerResponseType } from "@/types/responses";
-import { useRouter } from "next/navigation";
-
-const initialAuthResponse: ServerResponseType = { success: null, message: "" };
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Link from "next/link";
+import LoginForm from "./_components/login-form";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [authResponse, action, pending] = useActionState(
-    loginUser,
-    initialAuthResponse
-  );
-
-  useEffect(() => {
-    if (authResponse.success !== null) {
-      if (authResponse.success) {
-        toast.success(authResponse.message);
-        router.push("/");
-      } else {
-        toast.error(authResponse.message);
-      }
-    }
-  }, [authResponse, router]);
-
   return (
-    <form action={action} className="flex flex-col gap-3">
-      <label htmlFor="email">Email:</label>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        required
-        autoComplete="email"
-      />
-
-      <label htmlFor="password">Password:</label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        required
-        autoComplete="current-password"
-      />
-
-      <button type="submit" disabled={pending}>
-        {pending ? "Logging in..." : "Login"}
-      </button>
-    </form>
+    <div className="h-screen w-screen flex justify-center items-center p-1 font-heading">
+      <Card className="max-w-sm w-full">
+        <CardHeader>
+          <CardTitle className="text-center space-y-3">
+            <h2 className="text-2xl">LUXORA</h2>
+            <h1>Log into account</h1>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <LoginForm />
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <p className="text-sm text-muted-foreground">
+            {`Don't have an account? `}
+            <Link href="/register" className="underline">
+              Register here
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

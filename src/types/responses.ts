@@ -3,3 +3,9 @@ export type ServerResponseType = {
   message: string;
   data?: unknown;
 };
+
+export const defaultServerResponse: ServerResponseType = {
+  success: null,
+  message: "",
+  data: null,
+};

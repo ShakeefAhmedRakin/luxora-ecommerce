@@ -21,12 +21,17 @@ export async function registerUser(
   formData: FormData
 ): Promise<ServerResponseType> {
   try {
-    const { email, password, fullname } =
+    const { email, password, fullname, confirmPassword } =
       getValidatedRegisterFormData(formData);
 
     const userService = await getUserService();
 
-    await userService.registerUser({ email, password, fullname });
+    await userService.registerUser({
+      email,
+      password,
+      fullname,
+      confirmPassword,
+    });
 
     revalidatePath("/", "layout");
 

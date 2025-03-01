@@ -15,6 +15,7 @@ export function getValidatedRegisterFormData(
     email: formData.get("email"),
     password: formData.get("password"),
     fullname: formData.get("fullname"),
+    confirmPassword: formData.get("confirmPassword"),
   });
 
   if (!result.success) {
