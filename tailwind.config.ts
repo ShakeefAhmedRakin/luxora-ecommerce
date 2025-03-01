@@ -12,6 +12,7 @@ export default {
         text: "#131112",
         textLight: "#eeeced",
         background: "#fbfbfe",
+        backgroundMuted: "#F1F2F2",
         primary: "#131112",
       },
       fontFamily: {

@@ -1,9 +1,10 @@
 import React from "react";
+import Navbar from "./_components/navbar";
 
 export default function HomeLayout(props: React.PropsWithChildren) {
   return (
     <>
-      <h1>HEADER</h1>
+      <Navbar />
       {props.children}
       <h1>FOOTER</h1>
     </>

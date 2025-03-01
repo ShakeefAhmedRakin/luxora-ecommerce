@@ -1,37 +1,40 @@
 "use client";
 import { useActionState } from "react";
 import { useEffect } from "react";
-import { registerUser } from "../actions";
+import { registerUser } from "@/actions/auth";
 import { toast } from "sonner";
-import { AuthResponseType } from "@/types/auth";
+import { ServerResponseType } from "@/types/responses";
+import { useRouter } from "next/navigation";
 
-const initialAuthResponse: AuthResponseType = { success: null, message: "" };
+const initialAuthResponse: ServerResponseType = { success: null, message: "" };
 
 export default function RegisterPage() {
-  const [responseState, action, pending] = useActionState(
+  const router = useRouter();
+  const [authResponse, action, pending] = useActionState(
     registerUser,
     initialAuthResponse
   );
 
   useEffect(() => {
-    if (responseState.message) {
-      if (responseState.success) {
-        toast.success(responseState.message);
+    if (authResponse.success !== null) {
+      if (authResponse.success) {
+        toast.success(authResponse.message);
+        router.push("/");
       } else {
-        toast.error(responseState.message);
+        toast.error(authResponse.message);
       }
     }
-  }, [responseState]);
+  }, [authResponse, router]);
 
   return (
     <form action={action} className="flex flex-col gap-3">
-      <label htmlFor="displayName">Display Name:</label>
+      <label htmlFor="fullname">Full Name:</label>
       <input
-        id="displayName"
-        name="displayName"
+        id="fullname"
+        name="fullname"
         type="text"
         required
-        autoComplete="username"
+        autoComplete="name"
       />
 
       <label htmlFor="email">Email:</label>

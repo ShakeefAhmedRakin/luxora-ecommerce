@@ -4,16 +4,18 @@ import {
 } from "@/schemas/auth";
 import { LoginCredentialsType, RegisterCredentialsType } from "@/types/auth";
 
-export function validateRegisterFormData(
+export function getValidatedRegisterFormData(
   formData: FormData
 ): RegisterCredentialsType {
   if (!(formData instanceof FormData)) {
     throw new Error("Invalid form data");
   }
 
-  const formDataObject = Object.fromEntries(formData.entries());
-
-  const result = RegisterCredentialsSchema.safeParse(formDataObject);
+  const result = RegisterCredentialsSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+    fullname: formData.get("fullname"),
+  });
 
   if (!result.success) {
     throw new Error(result.error.issues[0]?.message || "Invalid input");
@@ -22,16 +24,17 @@ export function validateRegisterFormData(
   return result.data;
 }
 
-export function validateLoginFormData(
+export function getValidatedLoginFormData(
   formData: FormData
 ): LoginCredentialsType {
   if (!(formData instanceof FormData)) {
     throw new Error("Invalid form data");
   }
 
-  const formDataObject = Object.fromEntries(formData.entries());
-
-  const result = LoginCredentialsSchema.safeParse(formDataObject);
+  const result = LoginCredentialsSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
 
   if (!result.success) {
     throw new Error("Invalid credentials");
