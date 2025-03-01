@@ -9,7 +9,11 @@ class UserService {
     this.supabase = supabase;
   }
 
-  async registerUser({ email, password, fullname }: RegisterCredentialsType) {
+  async registerUser({
+    email,
+    password,
+    fullname,
+  }: Omit<RegisterCredentialsType, "confirmPassword">) {
     const { data: userData, error: accountCreationError } =
       await this.supabase.auth.signUp({
         email,

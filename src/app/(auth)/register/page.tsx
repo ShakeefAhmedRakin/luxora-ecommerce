@@ -16,7 +16,7 @@ export default function RegisterPage() {
           <CardHeader>
             <CardTitle className="text-center space-y-3">
               <h2 className="text-2xl">LUXORA</h2>
-              <h1>Create an account</h1>
+              <h1 className="font-medium">Create Account</h1>
             </CardTitle>
           </CardHeader>
           <CardContent>

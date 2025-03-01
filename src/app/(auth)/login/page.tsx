@@ -15,7 +15,7 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle className="text-center space-y-3">
             <h2 className="text-2xl">LUXORA</h2>
-            <h1>Log into account</h1>
+            <h1 className="font-medium">Login to Your Account</h1>
           </CardTitle>
         </CardHeader>
         <CardContent>
