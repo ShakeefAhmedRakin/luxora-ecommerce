@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LogInIcon } from "lucide-react";
 
 export default async function Navbar() {
-  const user = await getUser();
+  const { data: user } = await getUser();
 
   return (
     <>

@@ -1,4 +1,6 @@
+import { AccountUpdate } from "@/types/database/accounts";
 import { LoginCredentialsType, RegisterCredentialsType } from "@/types/auth";
+import { Role } from "@/types/permissions";
 import { SupabaseClient, User } from "@supabase/supabase-js";
 
 class UserService {
@@ -13,29 +15,16 @@ class UserService {
     password,
     fullname,
   }: Omit<RegisterCredentialsType, "confirmPassword">) {
-    const { data: userData, error: accountCreationError } =
-      await this.supabase.auth.signUp({
-        email,
-        password,
-      });
+    const { error: accountCreationError } = await this.supabase.auth.signUp({
+      email,
+      password,
+    });
 
     if (accountCreationError) {
       throw new Error(accountCreationError.message || "Internal server error");
     }
 
-    if (!userData?.user?.id) {
-      throw new Error("Internal server error");
-    }
-
-    const { data: updatedData, error: accountUpdateError } = await this.supabase
-      .from("accounts")
-      .update({ full_name: fullname })
-      .eq("id", userData.user.id)
-      .select();
-
-    if (!updatedData || accountUpdateError) {
-      throw new Error("Internal server error");
-    }
+    await this.updateAccountsData({ full_name: fullname });
   }
 
   async loginUser({ email, password }: LoginCredentialsType) {
@@ -65,15 +54,52 @@ class UserService {
   }
 
   async getUser(): Promise<User | null> {
-    const { data } = await this.supabase.auth.getUser();
+    const { data, error } = await this.supabase.auth.getUser();
+
+    if (error) {
+      throw new Error(error.message);
+    }
 
     return data?.user;
+  }
+
+  async getUserRole(): Promise<Role | null> {
+    const user = await this.getUser();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const { data, error } = await this.supabase
+      .from("accounts")
+      .select("role")
+      .eq("id", user?.id)
+      .single();
+
+    if (error) {
+      throw new Error("User role not found");
+    }
+
+    return data.role;
   }
 
   async logOutUser() {
     const { error } = await this.supabase.auth.signOut();
     if (error) {
       throw new Error(error.message);
+    }
+  }
+
+  private async updateAccountsData(updatedData: AccountUpdate): Promise<void> {
+    const user = await this.getUser();
+    const { error: accountUpdateError } = await this.supabase
+      .from("accounts")
+      .update(updatedData)
+      .eq("id", user?.id)
+      .select();
+
+    if (accountUpdateError) {
+      throw new Error("Internal server error");
     }
   }
 }

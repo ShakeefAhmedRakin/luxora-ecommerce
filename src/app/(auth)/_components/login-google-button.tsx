@@ -1,25 +1,28 @@
 "use client";
 import { loginUserWithGoogle } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
-import { ServerResponseType } from "@/types/responses";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 
-export default function LoginGoogleButton() {
-  const [pending, setPending] = useState(false);
-
+export default function LoginGoogleButton({
+  pending,
+  setPending,
+  buttonText = "Login with Google",
+}: {
+  pending: boolean;
+  setPending: React.Dispatch<React.SetStateAction<boolean>>;
+  buttonText?: string;
+}) {
   const handleLoginWithGoogle = async () => {
     setPending(true);
 
-    const response: ServerResponseType<{ callbackUrl: string }> =
-      await loginUserWithGoogle();
+    const { success, message, data } = await loginUserWithGoogle();
 
-    if (response.success && response?.data?.callbackUrl) {
-      window.location.replace(response.data.callbackUrl);
+    if (success && data) {
+      window.location.replace(data.callbackUrl);
     } else {
-      toast.error(response.message);
+      toast.error(message);
     }
     setPending(false);
   };
@@ -36,7 +39,7 @@ export default function LoginGoogleButton() {
         </>
       ) : (
         <>
-          Login with Google <FcGoogle />
+          <FcGoogle /> {buttonText}
         </>
       )}
     </Button>

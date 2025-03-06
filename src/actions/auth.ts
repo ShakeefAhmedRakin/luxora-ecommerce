@@ -1,5 +1,7 @@
 "use server";
 import UserService from "@/services/user-service";
+import { LoginCredentialsType, RegisterCredentialsType } from "@/types/auth";
+import { Role } from "@/types/permissions";
 import { ServerResponseType } from "@/types/responses";
 import {
   getValidatedLoginFormData,
@@ -17,8 +19,7 @@ async function getUserService(): Promise<UserService> {
 }
 
 export async function registerUser(
-  prevState: ServerResponseType,
-  formData: FormData
+  formData: RegisterCredentialsType
 ): Promise<ServerResponseType> {
   try {
     const { email, password, fullname } =
@@ -41,8 +42,7 @@ export async function registerUser(
 }
 
 export async function loginUser(
-  prevState: ServerResponseType,
-  formData: FormData
+  formData: LoginCredentialsType
 ): Promise<ServerResponseType> {
   try {
     const { email, password } = getValidatedLoginFormData(formData);
@@ -73,14 +73,6 @@ export async function loginUserWithGoogle(): Promise<
   }
 }
 
-export async function getUser(): Promise<User | null> {
-  const userService = await getUserService();
-
-  const data = await userService.getUser();
-
-  return data;
-}
-
 export async function logOutUser(): Promise<ServerResponseType> {
   try {
     const userService = await getUserService();
@@ -97,6 +89,30 @@ export async function logOutUser(): Promise<ServerResponseType> {
 
     return successResponse("Logout successful!");
   } catch (error: unknown) {
+    return errorResponse(error);
+  }
+}
+
+export async function getUser(): Promise<ServerResponseType<User | null>> {
+  try {
+    const userService = await getUserService();
+
+    const user = await userService.getUser();
+
+    return successResponse("User fetched successfully!", user);
+  } catch (error) {
+    return errorResponse(error);
+  }
+}
+
+export async function getUserRole(): Promise<ServerResponseType<Role | null>> {
+  try {
+    const userService = await getUserService();
+
+    const userRole = await userService.getUserRole();
+
+    return successResponse("User role fetched successfully!", userRole);
+  } catch (error) {
     return errorResponse(error);
   }
 }

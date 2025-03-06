@@ -24,7 +24,7 @@ export default function LogOutButton() {
 
   return (
     <>
-      <Button className="w-24" onClick={handleLogout}>
+      <Button className="w-24" onClick={handleLogout} disabled={pending}>
         {pending ? (
           <>
             <Loader2 className="animate-spin"></Loader2>
